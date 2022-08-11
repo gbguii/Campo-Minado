@@ -1,7 +1,11 @@
 package cod3r.java.curso.cm.visao;
 
 import java.awt.GridLayout;
+
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
 import cod3r.java.curso.cm.modelo.Tabuleiro;
 
 @SuppressWarnings("serial")
@@ -12,7 +16,15 @@ public class PainelTabuleiro extends JPanel{
 		tabuleiro.paraCada(c -> add(new BotaoCampo(c)));
 		
 		tabuleiro.registrarObservador(e -> {
-			// TODO mostrar resultado pro usuário
+			SwingUtilities.invokeLater(() -> {
+				if(e.isGanhou()) {
+					JOptionPane.showMessageDialog(this, "Ganhou :)");
+				}else {
+					JOptionPane.showMessageDialog(this, "Perdeu :(");
+				}
+				
+				tabuleiro.reiniciar();
+			});
 		});
 	}
 }

@@ -81,7 +81,7 @@ public class Campo {
 		minado = true;
 	}
 	
-	boolean isMinado() {
+	public boolean isMinado() {
 		return this.minado;
 	}
 	
@@ -127,5 +127,6 @@ public class Campo {
 		this.aberto = false;
 		this.minado = false;
 		this.marcado = false;
+		notificarObservadores(CampoEvento.REINICIAR);
 	}
 }

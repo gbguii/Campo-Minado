@@ -1,11 +1,16 @@
 package cod3r.java.curso.cm.visao;
 
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
+
 import cod3r.java.curso.cm.modelo.Campo;
 import cod3r.java.curso.cm.modelo.CampoEvento;
 import cod3r.java.curso.cm.modelo.CampoObservador;
@@ -15,13 +20,17 @@ public class BotaoCampo extends JButton implements CampoObservador, MouseListene
 	Campo campo;
 	
 	private final Color BG_PADRAO = new Color(184, 184, 184);
-	private final Color BG_MARCADO = new Color(8, 179, 247);
-	private final Color BG_EXPLODIR = new Color(189, 66, 68);
+	private final Color BG_MARCADO = new Color(6, 0, 43);
+	private final Color BG_EXPLODIR = new Color(255, 195, 195);
 	private final Color TEXTO_VERDE = new Color(0, 100, 0);
+	private final ImageIcon bomba = new ImageIcon(getClass().getResource("/cod3r/java/curso/cm/img/bomb.png"));
+	private final ImageIcon bandeira = new ImageIcon(getClass().getResource("/cod3r/java/curso/cm/img/bandeira.png"));
+
 	
 	BotaoCampo(Campo campo){
 		this.campo = campo; 
 		setBackground(BG_PADRAO);
+		setOpaque(true);
 		setBorder(BorderFactory.createBevelBorder(0));
 		addMouseListener(this);
 		campo.registrarObservador(this);
@@ -42,27 +51,41 @@ public class BotaoCampo extends JButton implements CampoObservador, MouseListene
 		default:
 			aplicarEstiloPadrao();
 		}
-		
+		SwingUtilities.invokeLater(() -> {
+			repaint();
+			validate();
+		});
 	}
 
 	private void aplicarEstiloPadrao() {
-		// TODO Auto-generated method stub
-		
+		setBackground(BG_PADRAO);
+		setBorder(BorderFactory.createBevelBorder(0));
+		setText("");
+		setIcon(null);
 	}
 
 	private void aplicarEstiloExplodir() {
-		// TODO Auto-generated method stub
-		
+		setBackground(BG_EXPLODIR);
+		setIcon(bomba);
 	}
 
 	private void aplicarEstiloMarcar() {
-		// TODO Auto-generated method stub
+		setBackground(BG_MARCADO);
+		setForeground(Color.BLACK);
+		setIcon(bandeira);
 		
 	}
 
 	private void aplicarEstiloAbrir() {
-		setBackground(BG_PADRAO);
 		setBorder(BorderFactory.createLineBorder(Color.GRAY));
+		
+		if(campo.isMinado()) {
+			setBackground(BG_EXPLODIR);
+			setIcon(bomba);
+			return;
+		}
+		
+		setBackground(BG_PADRAO);
 		switch (campo.minasNaVizinhanca()) {
 		case 1:
 			setForeground(TEXTO_VERDE);
